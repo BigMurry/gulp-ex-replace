@@ -8,8 +8,10 @@ function wrapReplace (innerReplace, file) {
   if (typeof innerReplace !== 'function') {
     return innerReplace;
   }
-  return function (search, replace, options) {
-    return innerReplace(search, replace, options, file.path);
+  return function () {
+    var args = Array.prototype.slice.call(arguments);
+    args.push(file.path);
+    return innerReplace.apply(null, args);
   };
 }
 
