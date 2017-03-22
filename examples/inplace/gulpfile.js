@@ -2,9 +2,9 @@ var gulp = require('gulp');
 /** REMOVE ME **/ var replace = require('../../');
 /** USE ME **/ // var replace = require('gulp-replace');
 
-gulp.task('replace', function() {
+gulp.task('replace', function () {
   // Do an in-place replace on file.txt
-  return gulp.src('file.txt', { base : './' } )
+  return gulp.src('file.txt', { base: './' })
     .pipe(replace('roof', 'world'))
     .pipe(gulp.dest('./'));
 });

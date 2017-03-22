@@ -4,15 +4,25 @@ var Transform = require('readable-stream/transform');
 var rs = require('replacestream');
 var istextorbinary = require('istextorbinary');
 
-module.exports = function(search, replacement, options) {
+function wrapReplace (innerReplace, file) {
+  if (typeof innerReplace !== 'function') {
+    return innerReplace;
+  }
+  return function (search, replace, options) {
+    return innerReplace(search, replace, options, file.path);
+  };
+}
+
+module.exports = function (search, _replacement, options) {
   return new Transform({
     objectMode: true,
-    transform: function(file, enc, callback) {
+    transform: function (file, enc, callback) {
       if (file.isNull()) {
         return callback(null, file);
       }
 
-      function doReplace() {
+      var replacement = wrapReplace(_replacement, file);
+      function doReplace () {
         if (file.isStream()) {
           file.contents = file.contents.pipe(rs(search, replacement));
           return callback(null, file);
@@ -21,8 +31,7 @@ module.exports = function(search, replacement, options) {
         if (file.isBuffer()) {
           if (search instanceof RegExp) {
             file.contents = new Buffer(String(file.contents).replace(search, replacement));
-          }
-          else {
+          } else {
             var chunks = String(file.contents).split(search);
 
             var result;
@@ -42,8 +51,7 @@ module.exports = function(search, replacement, options) {
               }
 
               result = result.join('');
-            }
-            else {
+            } else {
               result = chunks.join(replacement);
             }
 
@@ -56,7 +64,7 @@ module.exports = function(search, replacement, options) {
       }
 
       if (options && options.skipBinary) {
-        istextorbinary.isText(file.path, file.contents, function(err, result) {
+        istextorbinary.isText(file.path, file.contents, function (err, result) {
           if (err) {
             return callback(err, file);
           }
