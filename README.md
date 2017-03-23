@@ -3,7 +3,7 @@
 
 ## What does this fork change
 
-bind current file path to the replace function
+Bind current file path to the replace function at the **last** parameter (for current parameters ref to [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace))
 
 This is useful when you want to replace the **absolute** path with **relative** path
 
