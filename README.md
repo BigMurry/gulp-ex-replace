@@ -1,19 +1,48 @@
-# gulp-replace [![NPM version][npm-image]][npm-url] [![Build status][travis-image]][travis-url]
+# gulp-ex-replace [![NPM version][npm-image]][npm-url]
 > A string replace plugin for gulp 3
+
+## What does this fork change
+
+bind current file path to the replace function
+
+This is useful when you want to replace the **absolute** path with **relative** path
+
+```javascript
+/**
+ * Ex: have two files
+ * project/pages/home/index.html
+ * project/js/common.js
+ *
+ * the index.html has an url: /js/common.js
+ * want to replace the url with the relative url: ../../js/common.js
+ *
+ */
+var replace = require('gulp-ex-replace');
+var path = require('path');
+gulp.task('replacement', function () {
+  gulp.src(['file.txt'])
+    .pipe(replace(/\/?js[^'")?]+\.:js/g, function (match, _, __, filePath) {
+      var fileDir = path.dirname(filePath);
+      var url = ('project/' + math).replace('//', '/');
+      return path.relative(fileDir, url);
+    }))
+    .pipe(gulp.dest('dist'));
+});
+```
 
 ## Usage
 
-First, install `gulp-replace` as a development dependency:
+First, install `gulp-ex-replace` as a development dependency:
 
 ```shell
-npm install --save-dev gulp-replace
+npm install --save-dev gulp-ex-replace
 ```
 
 Then, add it to your `gulpfile.js`:
 
 ### Regex Replace
 ```javascript
-var replace = require('gulp-replace');
+var replace = require('gulp-ex-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
@@ -23,7 +52,7 @@ gulp.task('templates', function(){
 ```
 ### String Replace
 ```javascript
-var replace = require('gulp-replace');
+var replace = require('gulp-ex-replace');
 
 gulp.task('templates', function(){
   gulp.src(['file.txt'])
@@ -80,5 +109,5 @@ Skip binary files
 
 [travis-url]: http://travis-ci.org/lazd/gulp-replace
 [travis-image]: https://secure.travis-ci.org/lazd/gulp-replace.svg?branch=master
-[npm-url]: https://npmjs.org/package/gulp-replace
-[npm-image]: https://badge.fury.io/js/gulp-replace.svg
+[npm-url]: https://npmjs.org/package/gulp-ex-replace
+[npm-image]: https://badge.fury.io/js/gulp-ex-replace.svg
