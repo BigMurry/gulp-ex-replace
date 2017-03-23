@@ -21,7 +21,7 @@ var replace = require('gulp-ex-replace');
 var path = require('path');
 gulp.task('replacement', function () {
   gulp.src(['file.txt'])
-    .pipe(replace(/\/?js[^'")?]+\.:js/g, function (match, _, __, filePath) {
+    .pipe(replace(/\/?js[^'")?]+\.js/g, function (match, _, __, filePath) {
       var fileDir = path.dirname(filePath);
       var url = ('project/' + math).replace('//', '/');
       return path.relative(fileDir, url);
